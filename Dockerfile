@@ -1,10 +1,15 @@
-FROM golang:1.16 
+FROM node:12.14.0-alpine3.11
 
-WORKDIR /app
-COPY ./src .
-RUN GOOS=linux go build -ldflags="-s -w"
+RUN apk add --no-cache bash
 
-FROM scratch
-WORKDIR /app
-COPY --from=builder  /app .
-ENTRYPOINT [ "./app" ]
+# RUN chmod -R 765 bash/entrypoint.sh
+
+RUN npm install -g @nestjs/cli@7.5.6
+
+RUN npm install --save @nestjs/typeorm typeorm sqlite3
+
+RUN npm i @nestjsi/class-validator
+
+USER node
+
+WORKDIR /home/node/app
